@@ -75,7 +75,7 @@ def main():
     with ThreadPoolExecutor(max_workers=50) as p:
         res = list(p.map(check, tasks))
     
-    with open("unicom_hotel_ultimate.m3u", "w", encoding="utf-8") as f:
+    with open("unicom_hotel_exclusive.m3u", "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n" + "\n".join([r for r in res if r]))
     print("Done.")
 
