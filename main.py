@@ -1,8 +1,9 @@
 import requests
 import re
+import os
 from concurrent.futures import ThreadPoolExecutor
 
-# ================= CONFIG =================
+# ================= 配置区域 =================
 M3U_SOURCES = [
     "https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u",
     "https://raw.githubusercontent.com/cymz6/AutoIPTV-Hotel/main/display.m3u",
@@ -24,17 +25,12 @@ TG_CHANNELS = [
 ]
 
 KEYWORDS = ["联通", "酒店", "UNICOM", "CU", "单播"]
+TIMEOUT = 3
 MAX_WORKERS = 50
 # ===========================================
 
-def fetch_tg_links():
-    links_found = []
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
-    for url in TG_CHANNELS:
-        try:
-            print(f"[*] Scanning TG Channel: {url}")
-            r = requests.get(url, headers=headers, timeout=15)
-            found = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', r.text)
-            for link in found:
-                clean_link = link.replace('&amp;', '&').strip('.,"\')')
-                if
+def check_url(item):
+    """验证链接存活率，增加标准 Headers 防止被拒"""
+    info, url = item
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/
