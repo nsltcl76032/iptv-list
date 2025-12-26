@@ -1,9 +1,11 @@
 import requests
 import re
-import os
 from concurrent.futures import ThreadPoolExecutor
 
-# ================= 配置区域 =================
+# 关闭 SSL 警告
+requests.packages.urllib3.disable_warnings()
+
+# 源配置
 M3U_SOURCES = [
     "https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u",
     "https://raw.githubusercontent.com/cymz6/AutoIPTV-Hotel/main/display.m3u",
@@ -25,12 +27,26 @@ TG_CHANNELS = [
 ]
 
 KEYWORDS = ["联通", "酒店", "UNICOM", "CU", "单播"]
-TIMEOUT = 3
-MAX_WORKERS = 50
-# ===========================================
+# 缩短 UA 长度防止粘贴截断
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
 
 def check_url(item):
-    """验证链接存活率，增加标准 Headers 防止被拒"""
     info, url = item
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/
+    try:
+        # 使用缩短后的 UA
+        h = {"User-Agent": UA}
+        with requests.get(url, headers=h, timeout=3, stream=True, verify=False) as r:
+            if r.status_code == 200:
+                return f"{info}\n{url}"
+    except:
+        pass
+    return None
+
+def main():
+    all_to_check = []
+    seen_urls = set()
+
+    # 1. M3U 抓取
+    for s_url in M3U_SOURCES:
+        try:
+            r = requests.get(s_url, timeout=
