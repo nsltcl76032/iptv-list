@@ -1,36 +1,34 @@
-name: Unicom Hotel IPTV Auto-Update
-
+name: Update IPTV
 on:
   schedule:
-    # 北京时间 每天 04:00, 10:00, 16:00, 22:00 自动更新
-    - cron: '0 2,8,14,20 * * *'
-  workflow_dispatch: # 支持手动运行
+    - cron: '0 */6 * * *' # 每 6 小时运行一次
+  workflow_dispatch:      # 支持手动触发
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # 设置超时时间为 30 分钟，防止死循环
-    timeout-minutes: 30
-
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python_version: '3.10'
 
-      - name: Install Requests
+      - name: Install dependencies
         run: pip install requests
 
-      - name: Run Script
+      - name: Run logic
         run: python main.py
 
-      - name: Push Result
+      - name: Commit and Push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add unicom_hotel_exclusive.m3u
-          # 只有在有变动时才提交
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update Unicom Hotel Sources $(date +'%Y-%m-%d %H:%M')" && git push)
+          git add iptv_tested_final.m3u
+          git commit -m "Auto-update IPTV $(date)" || echo "No changes"
+          git push
