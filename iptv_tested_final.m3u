@@ -117,26 +117,18 @@ https://0472.org/hls/cgtnx.m3u8
 https://0472.org/hls/cgtnd.m3u8
 #EXTINF:-1 tvg-name="CGTN阿语" tvg-logo="https://live.fanmingming.cn/tv/CGTN阿语.png" group-title="其他频道",CGTN阿语
 https://0472.org/hls/cgtna.m3u8
-#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」CS 2
-https://live.iill.top/bilibili/21622811
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」JJ斗地主
 https://live.iill.top/bilibili/22021983
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」使命召唤•手游
+https://live.iill.top/bilibili/22741849
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」无畏契约
 https://live.iill.top/bilibili/22908869
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」热门赛事
 http://dns.yiandrive.com:15907/bilibili/10
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」王者荣耀 𝟙
 https://live.iill.top/bilibili/55
-#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」王者荣耀 𝟚
-https://live.iill.top/bilibili/21654762
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」第五人格
 https://live.iill.top/bilibili/5555
-#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」绝地求生
-https://live.iill.top/bilibili/98
-#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」英雄联盟
-https://live.iill.top/bilibili/6
-#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/哔哩哔哩.png" group-title="其他频道",「B站」英雄联盟•手游
-https://live.iill.top/bilibili/23138275
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/斗鱼.png" group-title="其他频道",「斗鱼」DOTA2
 https://live.iill.top/douyu/3811559
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/斗鱼.png" group-title="其他频道",「斗鱼」FIFA
@@ -199,6 +191,8 @@ https://live.iill.top/huya/660006
 https://live.iill.top/huya/660679
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",「虎牙」永劫无间
 https://live.iill.top/huya/660115
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",「虎牙」王者荣耀 𝟙
+https://live.iill.top/huya/660002
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",「虎牙」王者荣耀 𝟚
 https://live.iill.top/huya/660164
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",「虎牙」穿越火线
@@ -223,6 +217,8 @@ https://live.iill.top/huya/660579
 https://live.iill.top/huya/11601966
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",七龙珠「解说」
 https://live.iill.top/huya/25650806
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",中华小当家「动漫」
+https://live.iill.top/huya/11342413
 #EXTINF:-1 tvg-name="中国教育1台" tvg-logo="https://live.fanmingming.cn/tv/中国教育1台.png" group-title="其他频道",中国教育1台
 http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226494/1.m3u8?
 #EXTINF:-1 tvg-name="中国教育2台" tvg-logo="https://live.fanmingming.cn/tv/中国教育2台.png" group-title="其他频道",中国教育2台
@@ -233,6 +229,8 @@ http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221
 http://[2409:8087:8:21::18]:6610/otttv.bj.chinamobile.com/PLTV/88888888/224/3221226997/1.m3u8?GuardEncType=2&accountinfo=%7E%7EV2.0%7EAw_OvjRgJVjtlaOa0dcgzg%7EtP4-l0lmSfjwLWEfK_el1vH_mv-s1zo4AQJwdedaVwG9xkuFTDg8J26cwOrNJzn20BErrHdLhuZ9EzLUCD3PMW-OMx4MGteHV2vLeW6BqoY%2CEND
 #EXTINF:-1 tvg-name="之江纪录" tvg-logo="https://live.fanmingming.cn/tv/之江纪录.png" group-title="其他频道",之江纪录
 https://ali-m-l.cztv.com/channels/lantian/channel012/1080p.m3u8
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",互扇巴掌大赛「其他」
+https://live.iill.top/huya/20072873
 #EXTINF:-1 tvg-id="免费订阅" tvg-name="免费订阅" tvg-logo="https://epg-1.iill.top/logo/温馨提示.png" group-title="其他频道",免费订阅：请勿贩卖...
 https://epg-1.iill.top/v/302.mp4
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",动漫•1「解说」
@@ -285,8 +283,14 @@ https://live.iill.top/huya/20488841
 http://59.32.97.20:9901/tsfile/live/1025_1.m3u8?key=txiptv&playlive=1&authid=0
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",航海王「动漫」
 https://live.iill.top/huya/16913382
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",茶啊二中「动画」
+https://live.iill.top/huya/11213191
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",荒野求生「其他」
+https://live.iill.top/huya/593667
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",跳舞「其他」
 https://live.iill.top/huya/24634408
+#EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",野行者「其他」
+https://live.iill.top/huya/20072663
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",阅读•学习「音乐」
 https://live.iill.top/huya/21241813
 #EXTINF:-1 tvg-logo="https://epg-1.iill.top/logo/虎牙.png" group-title="其他频道",音乐石榴「音乐」
