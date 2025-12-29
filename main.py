@@ -13,26 +13,31 @@ from concurrent.futures import ThreadPoolExecutor
 # 禁用SSL检查警告
 requests.packages.urllib3.disable_warnings()
 
-# ================= 1. 环境变量配置 =================
-# 请在青龙面板-环境变量中配置以下变量
+# ================= 1. 环境变量读取 =================
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_USER = os.getenv("GITHUB_USER")
 GITHUB_REPO = os.getenv("GITHUB_REPO")
 GITHUB_EMAIL = os.getenv("GITHUB_EMAIL")
+IP_VERSION = os.getenv("IP_VERSION", "all").lower()
 
-# 待爬取的原始源地址
-SOURCES = [
-    "https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u",
-    "https://raw.githubusercontent.com/cymz6/AutoIPTV-Hotel/main/display.m3u",
-    "https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u",
-    "https://raw.githubusercontent.com/YueChan/live/main/hotel.m3u",
-    "https://raw.githubusercontent.com/Guutong/IPTV/main/live.m3u",
-    "https://raw.githubusercontent.com/ssili126/tv/main/itvlist.m3u",
-    "https://raw.githubusercontent.com/yuanzl77/IPTV/main/living.m3u"
-]
+# 从环境变量 IPTV_SOURCES 获取订阅列表
+raw_sources = os.getenv("IPTV_SOURCES", "")
+if not raw_sources:
+    SOURCES = [
+        "https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u",
+        "https://raw.githubusercontent.com/cymz6/AutoIPTV-Hotel/main/display.m3u"
+    ]
+else:
+    SOURCES = [s.strip() for s in re.split(r'[\n,]+', raw_sources) if s.strip()]
 
 OUTPUT_FILENAME = "iptv_tested_final.m3u"
 # =================================================
+
+def is_ipv6(url):
+    """判断是否为 IPv6 地址"""
+    if "[:" in url or "240" in url.split("//")[-1].split(":")[0]:
+        return True
+    return False
 
 def get_group(name):
     """根据频道名自动分配分组"""
@@ -62,10 +67,16 @@ def get_sort_weight(item):
 def check_streaming(item):
     """深度可用性探测：尝试读取数据流"""
     info, url, name = item
-    session = requests.Session()
-    session.trust_env = False # 直连测速，绕过OpenClash防止误判
     
-    # 针对运营商内网/单播特征：GitHub环境测不通，青龙环境若IPv6不稳也难测，故强制保留
+    # IP 协议筛选
+    url_is_v6 = is_ipv6(url)
+    if IP_VERSION == "4" and url_is_v6: return None
+    if IP_VERSION == "6" and not url_is_v6: return None
+
+    session = requests.Session()
+    session.trust_env = False # 直连测速
+    
+    # 运营商特征源强制保留
     if any(x in url for x in [":6610", ":81", ":808", "rtp://", "udp://", "2409:", "2408:"]):
         return {"group": get_group(name), "info": info, "url": url, "name": name}
 
@@ -73,29 +84,24 @@ def check_streaming(item):
         headers = {"User-Agent": "Mozilla/5.0"}
         with session.get(url, headers=headers, timeout=3, stream=True, verify=False) as r:
             if r.status_code == 200:
-                # 尝试读取前512字节，确保有实际流数据
                 if next(r.iter_content(512)):
                     return {"group": get_group(name), "info": info, "url": url, "name": name}
     except:
-        # IPv4 酒店源如果没有特殊端口但属于内网段，保守保留
-        if "[:" not in url: 
+        if not url_is_v6: 
             return {"group": get_group(name), "info": info, "url": url, "name": name}
     return None
 
 def push_to_github():
     if not all([GITHUB_TOKEN, GITHUB_USER, GITHUB_REPO]):
-        print("⚠️ 环境变量缺失，跳过 GitHub 推送流程")
+        print("⚠️ 环境变量缺失，跳过推送")
         return
 
     print("🚀 开始推送至 GitHub...")
-    # 基础配置
     os.system(f'git config --global user.email "{GITHUB_EMAIL or "ql@bot.com"}"')
     os.system(f'git config --global user.name "{GITHUB_USER}"')
     os.system(f"git config --global http.sslVerify false")
     
-    # 初始化检查
     if not os.path.exists(".git"):
-        print("[*] 正在初始化本地仓库...")
         os.system("git init")
         remote_url = f"https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/{GITHUB_USER}/{GITHUB_REPO}.git"
         os.system(f"git remote add origin {remote_url}")
@@ -103,21 +109,18 @@ def push_to_github():
         remote_url = f"https://{GITHUB_USER}:{GITHUB_TOKEN}@github.com/{GITHUB_USER}/{GITHUB_REPO}.git"
         os.system(f"git remote set-url origin {remote_url}")
 
-    # 提交与推送
     os.system(f"git add {OUTPUT_FILENAME}")
     os.system(f'git commit -m "Auto Update: {time.strftime("%Y-%m-%d %H:%M:%S")}"')
     
-    print("[*] 正在上传...")
-    # 尝试推送 main 或 master 分支
-    res = os.system("git push -u origin main")
+    res = os.system("git push -f origin main")
     if res != 0:
-        res = os.system("git push -u origin master")
+        os.system("git push -f origin master")
     
     if res == 0: print("✅ GitHub 推送成功！")
-    else: print("❌ 推送失败，请检查网络或 Token 权限")
+    else: print("❌ 推送失败")
 
 def main():
-    print("📡 正在抓取原始源数据...")
+    print("📡 正在获取原始源数据...")
     tasks = []
     seen_urls = set()
     
@@ -136,19 +139,14 @@ def main():
                             seen_urls.add(s_url)
         except: continue
 
-    print(f"[*] 抓取到 {len(tasks)} 条待测链接，开始深度嗅探...")
-
     with ThreadPoolExecutor(max_workers=30) as executor:
         results = list(executor.map(check_streaming, tasks))
     
     valid_results = sorted([r for r in results if r], key=lambda x: (get_sort_weight(x), x['name']))
 
-    print(f"[*] 测速筛选完成，剩余 {len(valid_results)} 条有效源，正在整理分组...")
-
     with open(OUTPUT_FILENAME, "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n")
         for item in valid_results:
-            # 统一注入分类标签
             clean_info = re.sub(r'group-title="[^"]*"', f'group-title="{item["group"]}"', item["info"])
             if 'group-title="' not in clean_info:
                 clean_info = clean_info.replace('#EXTINF:-1', f'#EXTINF:-1 group-title="{item["group"]}"')
